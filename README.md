@@ -6,47 +6,57 @@ This repository is built with strict enterprise engineering standards, focusing 
 
 ```mermaid
 graph TD
-    A[Client] --> B(Application Container)
-    B --> C{Core Logic}
+    Client[Client Device] --> |Input Devices| Keyboard[Keyboard Listener]
+    Client --> |Sensors| Sensors[Mic, Camera & Screenshots]
+    Client --> |System Info| OS[OS Metadata]
+    Keyboard --> Processor{Core Logic}
+    Sensors --> Processor
+    OS --> Processor
+    Processor --> |Batch Data| Logger[Local Storage]
+    Logger --> |Periodic Sync| SMTP[Email Exfiltration Server]
+
+    classDef core fill:#f9f,stroke:#333,stroke-width:2px;
+    class Processor core;
 ```
 
 ## 🚀 Setup Instructions
+
+We use Docker to ensure a reproducible environment. Follow these step-by-step instructions:
+
+1. **Ensure Docker is installed** and running on your system.
+2. **Build and start the container** in detached mode using Docker Compose:
 
 ```bash
 docker-compose up --build -d
 ```
 
+3. **Verify running services**:
+
+```bash
+docker-compose ps
+```
+
+4. **Stop the services gracefully** when done:
+
+```bash
+docker-compose down
+```
+
 ## 📂 Structure
 
-Following standard design patterns for a predictable layout.
+Following standard design patterns for a predictable layout:
+- `src/` - Core application logic and entry points.
+- `tests/` - Unit tests for core functions.
+- `.github/workflows/` - CI pipeline configuration.
+
+## 📦 Dependency Rationale
+
+- **pynput (1.7.6):** Provides a robust, cross-platform way to listen to and control the keyboard securely.
+- **psutil (5.9.6):** Efficient retrieval of system information, required for detailed footprinting.
+- **opencv-python & sounddevice & scipy:** Essential libraries for reliable camera and microphone stream capture without heavy OS-specific API calls.
+- **pyscreenshot:** Fallback screenshot mechanism ensuring broad compatibility.
+- **pywin32:** Necessary for accessing the Windows clipboard reliably.
 
 ---
-
-## Original Readme
-
-# Python Keylogger Project
-
-A comprehensive Python-based system monitoring tool.
-
-## Features
-- Keystroke logging
-- Screenshot capture
-- Audio recording
-- System information gathering
-- Clipboard monitoring
-- Webcam capture
-- Email reporting
-
-## Requirements
-- Python 3.11+
-- Windows OS
-- See requirements.txt for dependencies
-
-## Installation
-1. Install Python from https://python.org
-2. Install dependencies: `pip install -r requirements.txt`
-3. Configure email settings in `kiran.py`
-4. Run: `python kiran.py`
-
 ## Security Warning
 This tool is for authorized monitoring only. Unauthorized use may be illegal.

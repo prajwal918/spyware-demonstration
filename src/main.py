@@ -232,5 +232,13 @@ def main():
 
 # Fix the main function entry
 if __name__ == "__main__":
-
-    main()
+    try:
+        print("[+] Starting application...")
+        main()
+    except KeyboardInterrupt:
+        print("\n[-] Application stopped by user. Exiting gracefully...")
+        sys.exit(0)
+    except Exception as e:
+        print(f"[-] FATAL ERROR: An unexpected error occurred: {e}")
+        # Could log this to a file or send a critical alert
+        sys.exit(1)
